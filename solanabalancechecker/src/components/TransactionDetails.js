@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import "./TransactionDetails.css";
 
 const TransactionDetails = ({ transactions }) => {
+  const [activeIndex, setActiveIndex] = useState(null);
+
   if (transactions.length === 0) {
     return null; // No transactions to display
   }
@@ -39,34 +42,16 @@ const TransactionDetails = ({ transactions }) => {
             // Convert lamports to SOL (1 SOL = 1,000,000,000 lamports)
             const amountInSol = parseFloat(transaction.amount) / 1_000_000_000;
 
+            const isActive = activeIndex === index;
+
             return (
               <div
                 key={index}
-                style={{
-                  borderBottom: "1px solid #eee",
-                  padding: "1rem",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                  transition:
-                    "transform 0.3s, box-shadow 0.3s, background-color 0.3s",
-                  marginBottom: "1rem",
-                  borderRadius: "8px",
-                  backgroundColor: "#f9f9f9",
-                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = "scale(1.03)";
-                  e.currentTarget.style.boxShadow =
-                    "0 6px 12px rgba(0, 0, 0, 0.2)";
-                  e.currentTarget.style.backgroundColor = "#bebcbc"; // Change to gray on hover
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = "scale(1)";
-                  e.currentTarget.style.boxShadow =
-                    "0 2px 4px rgba(0, 0, 0, 0.1)";
-                  e.currentTarget.style.backgroundColor = "#f9f9f9"; // Reset background color
-                }}
+                className={`transaction-item ${isActive ? "active" : ""}`}
+                onMouseEnter={() => setActiveIndex(index)}
+                onMouseLeave={() => setActiveIndex(null)}
+                onTouchStart={() => setActiveIndex(index)}
+                onTouchEnd={() => setActiveIndex(null)}
               >
                 <p
                   style={{
