@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Connection, PublicKey } from "@solana/web3.js";
 import TransactionDetails from "./TransactionDetails";
-import BlinkingDotsBackground from "./BlinkingDotsBackground"; // Import the new component
+import BlinkingDotsBackground from "./BlinkingDotsBackground";
 
 const BalanceChecker = () => {
   const [publicKey, setPublicKey] = useState("");
@@ -88,6 +88,7 @@ const BalanceChecker = () => {
             padding: "2rem",
             maxWidth: "400px",
             width: "100%",
+            boxSizing: "border-box",
           }}
         >
           <input
@@ -153,6 +154,40 @@ const BalanceChecker = () => {
         </div>
         {publicKey && <TransactionDetails transactions={transactions} />}
       </div>
+      <style>
+        {`
+          @media (max-width: 768px) {
+            h1 {
+              font-size: 2rem;
+              margin-bottom: 1.5rem;
+            }
+            div[style*="padding: 2rem;"] {
+              padding: 1.5rem;
+              max-width: 90%;
+            }
+            button {
+              font-size: 0.9rem;
+              padding: 0.7rem;
+            }
+            p[style*="font-size: 1.25rem;"] {
+              font-size: 1rem;
+            }
+          }
+
+          @media (max-width: 480px) {
+            h1 {
+              font-size: 1.5rem;
+            }
+            div[style*="padding: 2rem;"] {
+              padding: 1rem;
+            }
+            input,
+            button {
+              font-size: 0.85rem;
+            }
+          }
+        `}
+      </style>
     </div>
   );
 };

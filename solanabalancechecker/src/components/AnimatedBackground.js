@@ -5,9 +5,10 @@ const AnimatedBackground = () => {
   const mountRef = useRef(null);
 
   useEffect(() => {
-    const width = window.innerWidth;
-    const height = window.innerHeight;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
 
+    // Create the scene, camera, and renderer
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
@@ -37,9 +38,14 @@ const AnimatedBackground = () => {
       dots.push(dot);
     }
 
-    // Load Solana logo texture
+    // Check if the device is mobile or desktop
+    const isMobile = window.innerWidth <= 768;
+
+    // Load Solana logo texture based on device type
     const loader = new THREE.TextureLoader();
-    loader.load("/solanalogo.png", (texture) => {
+    const logoTexturePath = isMobile ? "/sol.webp" : "/solanalogo.webp";
+
+    loader.load(logoTexturePath, (texture) => {
       const logoGeometry = new THREE.PlaneGeometry(2.5, 2.5); // Adjust the size as needed
       const logoMaterial = new THREE.MeshBasicMaterial({
         map: texture,
@@ -47,8 +53,14 @@ const AnimatedBackground = () => {
       });
       const logo = new THREE.Mesh(logoGeometry, logoMaterial);
 
-      // Set position for the logo at the top of the screen
-      logo.position.set(0, height / window.innerHeight - 0.5, -1); // Adjust y position for top
+      // Set position for the logo
+      if (isMobile) {
+        // Center the logo in mobile devices
+        logo.position.set(0, 0, -1); // Centered at (0,0) in the scene
+      } else {
+        logo.position.set(0, height / window.innerHeight - 0.5, -1); // Adjust position for desktop
+      }
+
       scene.add(logo);
     });
 
@@ -69,8 +81,20 @@ const AnimatedBackground = () => {
 
     animate();
 
+    // Handle window resize
+    const handleResize = () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      renderer.setSize(width, height);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    };
+
+    window.addEventListener("resize", handleResize);
+
     return () => {
       mountRef.current.removeChild(renderer.domElement);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
