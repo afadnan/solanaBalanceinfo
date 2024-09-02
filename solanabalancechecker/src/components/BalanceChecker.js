@@ -44,7 +44,7 @@ const BalanceChecker = () => {
       );
       setTransactions(transactionsData);
     } catch (err) {
-      setError("Invalid public key or unable to fetch balance");
+      setError("Invalid Address or unable to fetch balance");
       setBalance(null);
       setTransactions([]);
     }
@@ -93,7 +93,7 @@ const BalanceChecker = () => {
         >
           <input
             type="text"
-            placeholder="Enter your public key"
+            placeholder="Enter your Address"
             value={publicKey}
             onChange={(e) => setPublicKey(e.target.value)}
             style={{
