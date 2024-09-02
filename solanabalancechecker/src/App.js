@@ -1,25 +1,28 @@
+import React from "react";
+import AnimatedBackground from "./components/AnimatedBackground";
+import BalanceChecker from "./components/BalanceChecker";
+import Footer from "./components/Footer";
 
-import './App.css';
-
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh", // Ensures the container takes at least the full viewport height
+      }}
+    >
+      <div
+        style={{
+          flex: "1", // Allows the content to grow and push the footer down
+        }}
+      >
+        <AnimatedBackground />
+        <BalanceChecker />
+      </div>
+      <Footer />
     </div>
   );
-}
+};
 
 export default App;
