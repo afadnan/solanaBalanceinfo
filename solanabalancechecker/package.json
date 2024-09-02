@@ -1,7 +1,7 @@
 {
   "name": "solanabalancechecker",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@react-three/fiber": "^8.17.6",
     "@solana/web3.js": "^1.95.3",
