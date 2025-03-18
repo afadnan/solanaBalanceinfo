@@ -14,7 +14,7 @@ const BalanceChecker = () => {
       setError("Please enter a valid Solana address.");
       return;
     }
-  
+
     try {
       console.log("Checking public key format...");
       const pubKey = new PublicKey(publicKey);
@@ -24,46 +24,51 @@ const BalanceChecker = () => {
       console.error("Public Key Error:", err);
       return;
     }
-  
+
     try {
       console.log("Connecting to Solana RPC...");
       const connection = new Connection(
         "https://solana-mainnet.g.alchemy.com/v2/JhXZrWAo-IoTHUhLxFjkCbCDYu-mfZPa",
         "confirmed"
       );
-  
+
       console.log("Fetching balance...");
       const pubKey = new PublicKey(publicKey);
       const balance = await connection.getBalance(pubKey);
       console.log("Balance fetched:", balance);
-  
+
       if (balance === null || balance === undefined) {
         throw new Error("Balance fetch failed.");
       }
-  
+
       setBalance(balance / 1e9);
       setError("");
-  
+
       console.log("Fetching recent transactions...");
       const recentTransactions =
         await connection.getSignaturesForAddress(pubKey, { limit: 5 });
-  
+
       console.log("Recent transactions:", recentTransactions);
-  
+
       if (!recentTransactions || recentTransactions.length === 0) {
         console.warn("No transactions found.");
         setTransactions([]);
         return;
       }
-  
+
       const transactionsData = await Promise.all(
         recentTransactions.map(async (tx) => {
-          const transactionDetails = await connection.getTransaction(tx.signature, {
-            commitment: "confirmed",
-          });
-  
+          // Note the addition of maxSupportedTransactionVersion: 0 below
+          const transactionDetails = await connection.getTransaction(
+            tx.signature,
+            {
+              commitment: "confirmed",
+              maxSupportedTransactionVersion: 0,
+            }
+          );
+
           console.log("Transaction details:", transactionDetails);
-  
+
           if (!transactionDetails || !transactionDetails.meta) {
             return {
               signature: tx.signature,
@@ -71,7 +76,7 @@ const BalanceChecker = () => {
               timestamp: Date.now(),
             };
           }
-  
+
           return {
             signature: tx.signature,
             amount:
@@ -81,7 +86,7 @@ const BalanceChecker = () => {
           };
         })
       );
-  
+
       setTransactions(transactionsData);
     } catch (err) {
       console.error("Error fetching balance or transactions:", err);
@@ -90,8 +95,6 @@ const BalanceChecker = () => {
       setTransactions([]);
     }
   };
-  
-  
 
   return (
     <div
