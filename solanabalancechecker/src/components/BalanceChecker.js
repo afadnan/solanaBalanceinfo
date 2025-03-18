@@ -10,45 +10,88 @@ const BalanceChecker = () => {
   const [transactions, setTransactions] = useState([]);
 
   const checkBalance = async () => {
-    if (!publicKey) return;
-
+    if (!publicKey) {
+      setError("Please enter a valid Solana address.");
+      return;
+    }
+  
     try {
+      console.log("Checking public key format...");
+      const pubKey = new PublicKey(publicKey);
+      console.log("Public Key is valid:", pubKey.toString());
+    } catch (err) {
+      setError("Invalid Solana address format.");
+      console.error("Public Key Error:", err);
+      return;
+    }
+  
+    try {
+      console.log("Connecting to Solana RPC...");
       const connection = new Connection(
-        "https://solana-mainnet.g.alchemy.com/v2/FwdhXwz5TEVKoa5nxDNfKq49nb7-YHFO",
+        "https://solana-mainnet.g.alchemy.com/v2/JhXZrWAo-IoTHUhLxFjkCbCDYu-mfZPa",
         "confirmed"
       );
-
+  
+      console.log("Fetching balance...");
       const pubKey = new PublicKey(publicKey);
       const balance = await connection.getBalance(pubKey);
-      setBalance(balance / 1e9); // Convert lamports to SOL
+      console.log("Balance fetched:", balance);
+  
+      if (balance === null || balance === undefined) {
+        throw new Error("Balance fetch failed.");
+      }
+  
+      setBalance(balance / 1e9);
       setError("");
-
-      // Fetch transactions
+  
+      console.log("Fetching recent transactions...");
       const recentTransactions =
-        await connection.getConfirmedSignaturesForAddress2(pubKey, {
-          limit: 5,
-        });
+        await connection.getSignaturesForAddress(pubKey, { limit: 5 });
+  
+      console.log("Recent transactions:", recentTransactions);
+  
+      if (!recentTransactions || recentTransactions.length === 0) {
+        console.warn("No transactions found.");
+        setTransactions([]);
+        return;
+      }
+  
       const transactionsData = await Promise.all(
         recentTransactions.map(async (tx) => {
-          const transactionDetails = await connection.getTransaction(
-            tx.signature
-          );
+          const transactionDetails = await connection.getTransaction(tx.signature, {
+            commitment: "confirmed",
+          });
+  
+          console.log("Transaction details:", transactionDetails);
+  
+          if (!transactionDetails || !transactionDetails.meta) {
+            return {
+              signature: tx.signature,
+              amount: 0,
+              timestamp: Date.now(),
+            };
+          }
+  
           return {
             signature: tx.signature,
             amount:
-              transactionDetails?.meta?.preBalances[0] -
-              transactionDetails?.meta?.postBalances[0],
-            timestamp: transactionDetails?.blockTime * 1000 || Date.now(),
+              transactionDetails.meta.preBalances[0] -
+              transactionDetails.meta.postBalances[0],
+            timestamp: transactionDetails.blockTime * 1000 || Date.now(),
           };
         })
       );
+  
       setTransactions(transactionsData);
     } catch (err) {
-      setError("Invalid Address or unable to fetch balance");
+      console.error("Error fetching balance or transactions:", err);
+      setError(`Error: ${err.message || "Invalid Address or unable to fetch balance."}`);
       setBalance(null);
       setTransactions([]);
     }
   };
+  
+  
 
   return (
     <div
