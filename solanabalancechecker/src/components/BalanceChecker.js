@@ -3,6 +3,7 @@ import { Connection, PublicKey } from "@solana/web3.js";
 import TransactionDetails from "./TransactionDetails";
 import BlinkingDotsBackground from "./BlinkingDotsBackground";
 
+
 const BalanceChecker = () => {
   const [publicKey, setPublicKey] = useState("");
   const [balance, setBalance] = useState(null);
@@ -28,7 +29,7 @@ const BalanceChecker = () => {
     try {
       console.log("Connecting to Solana RPC...");
       const connection = new Connection(
-        "https://solana-mainnet.g.alchemy.com/v2/JhXZrWAo-IoTHUhLxFjkCbCDYu-mfZPa",
+        "https://solana-mainnet.g.alchemy.com/v2/REACT_APP_ALCHEMY_API_KEY",
         "confirmed"
       );
 
