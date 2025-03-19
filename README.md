@@ -1,5 +1,5 @@
 #  📌 Solana Balance Checker
-🔗 **Live Demo:** [Check your Solana Balance](https://solana-balance-checker-two.vercel.app/) <br />
+🔗 **Live Demo:** <a href="https://solana-balance-checker-two.vercel.app/" target="_blank">Check your Solana Balance</a> <br />
 A simple web application that allows users to check their Solana wallet balance and recent transactions using the Solana Blockchain and Alchemy API.
 
 
@@ -33,16 +33,16 @@ npm start <br />
 This will run the app on http://localhost:3000/. <br />
 
 ## 🎯 Usage  
-🔗 **Live App:** [Solana Balance Checker](https://solana-balance-checker-two.vercel.app/)  
+🔗 **Live App:** <a href="https://solana-balance-checker-two.vercel.app/" target="_blank">Solana Balance Checker</a>  
 
 1. Open the website.  
 2. Enter your **Solana Wallet Address**.  
-3. Click **"Check Balance"** to view your SOL balance and recent transactions. 
-
+3. Click **"Check Balance"** to view your SOL balance and recent transactions.  
 
 ## 🚀 Deployment  
 This project is deployed on **Vercel**. You can access the live version here:  
-🔗 **[Solana Balance Checker](https://solana-balance-checker-two.vercel.app/)**  
+🔗 **<a href="https://solana-balance-checker-two.vercel.app/" target="_blank">Solana Balance Checker</a>**  
+
 
  
 
