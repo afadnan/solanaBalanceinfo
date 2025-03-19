@@ -29,10 +29,11 @@ const BalanceChecker = () => {
     try {
       console.log("Connecting to Solana RPC...");
       const connection = new Connection(
-        "https://solana-mainnet.g.alchemy.com/v2/REACT_APP_ALCHEMY_API_KEY",
+        `https://solana-mainnet.g.alchemy.com/v2/${process.env.REACT_APP_ALCHEMY_API_KEY}`,
         "confirmed"
       );
-
+      
+      console.log("Alchemy API Key:", process.env.REACT_APP_ALCHEMY_API_KEY);
       console.log("Fetching balance...");
       const pubKey = new PublicKey(publicKey);
       const balance = await connection.getBalance(pubKey);
